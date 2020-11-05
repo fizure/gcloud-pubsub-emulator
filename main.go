@@ -7,6 +7,7 @@ import (
 	"os"
 	"runtime"
 	"strings"
+	"time"
 
 	"cloud.google.com/go/pubsub"
 )
@@ -68,21 +69,30 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 		}
 
 		for _, subscription := range subscriptions {
-			var err error
 			if subscription.push != "" {
 				fmt.Printf("    Creating PUSH subscription %q on topic %q to endpoint %q\n", subscription.name, topicID, subscription.push)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{Topic: topic})
+				if err != nil {
+					return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
+				}
 			} else {
-				fmt.Printf("    Creating PULL subscription %q on topic %q", subscription.name, topicID)
+				fmt.Printf("    Creating PULL subscription %q on topic %q\n", subscription.name, topicID)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{
 					Topic: topic,
 					PushConfig: pubsub.PushConfig{
 						Endpoint: subscription.push,
 					},
+					AckDeadline: 10 * time.Second,
+					ExpirationPolicy: 10 * time.Minute,
+					RetainAckedMessages: false,
+					RetryPolicy: &pubsub.RetryPolicy{
+						MinimumBackoff: 3 * time.Second,
+						MaximumBackoff: 5 * time.Second,
+					},
 				})
-			}
-			if err != nil {
-				return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
+				if err != nil {
+					return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
+				}
 			}
 		}
 	}

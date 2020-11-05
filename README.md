@@ -1,6 +1,7 @@
 # Adds push subscription
-`;` to separate topic;subscription;subscription;subscription
-`|` to separate topic;subscription|push_endpoint;subscription|push_endpoint
+`;` to separate ```topic;subscription;subscription;subscription```  
+`|` to separate ```topic;subscription|push_endpoint;subscription|push_endpoint```
+pull and push subscriptions can be mixed
 
 gcloud-pubsub-emulator
 ----------------------
