@@ -1,3 +1,5 @@
+# Adds push subscription
+
 gcloud-pubsub-emulator
 ----------------------
 This repository contains the Docker configuration for Google's PubSub emulator. It's mainly the dockerization and documentation of https://github.com/prep/pubsubc 
