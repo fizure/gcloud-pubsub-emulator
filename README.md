@@ -1,4 +1,6 @@
 # Adds push subscription
+`;` to separate topic;subscription;subscription;subscription
+`|` to separate topic;subscription|push_endpoint;subscription|push_endpoint
 
 gcloud-pubsub-emulator
 ----------------------

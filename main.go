@@ -131,7 +131,7 @@ func main() {
 		// Separate the topicID from the subscription IDs.
 		topics := make(Topics)
 		for _, part := range parts[1:] {
-			topicParts := strings.Split(part, ":")
+			topicParts := strings.Split(part, ";")
 			for _, subPart := range topicParts {
 				subscriptionParts := strings.Split(subPart, "|")
 				var sub = Subscription{
