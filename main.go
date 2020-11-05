@@ -58,10 +58,10 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 	}
 	defer client.Close()
 
-	debugf("Client connected with project ID %q", projectID)
+	fmt.Printf("Client connected with project ID %q", projectID)
 
 	for topicID, subscriptions := range topics {
-		debugf("  Creating topic %q", topicID)
+		fmt.Printf("  Creating topic %q", topicID)
 		topic, err := client.CreateTopic(ctx, topicID)
 		if err != nil {
 			return fmt.Errorf("Unable to create topic %q for project %q: %s", topicID, projectID, err)
@@ -70,10 +70,10 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 		for _, subscription := range subscriptions {
 			var err error
 			if subscription.push != "" {
-				debugf("    Creating PUSH subscription %q on topic %q to endpoint %q", subscription.name, topicID, subscription.push)
+				fmt.Printf("    Creating PUSH subscription %q on topic %q to endpoint %q\n", subscription.name, topicID, subscription.push)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{Topic: topic})
 			} else {
-				debugf("    Creating PULL subscription %q on topic %q", subscription.name, topicID)
+				fmt.Printf("    Creating PULL subscription %q on topic %q", subscription.name, topicID)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{
 					Topic: topic,
 					PushConfig: pubsub.PushConfig{
@@ -142,6 +142,10 @@ func main() {
 				}
 				topics[topicParts[0]] = append(topics[topicParts[0]], sub)
 			}
+		}
+
+		for topicID, subscriptions := range topics {
+			fmt.Println("found", topicID, subscriptions)
 		}
 
 		// Create the project and all its topics and subscriptions.
