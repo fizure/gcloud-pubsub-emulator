@@ -70,10 +70,10 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 		for _, subscription := range subscriptions {
 			var err error
 			if subscription.push != "" {
-				debugf("    Creating PUSH subscription %q", subscription)
+				debugf("    Creating PUSH subscription %q on topic %q to endpoint %q", subscription.name, topicID, subscription.push)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{Topic: topic})
 			} else {
-				debugf("    Creating PULL subscription %q", subscription)
+				debugf("    Creating PULL subscription %q on topic %q", subscription.name, topicID)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{
 					Topic: topic,
 					PushConfig: pubsub.PushConfig{
@@ -132,7 +132,7 @@ func main() {
 		topics := make(Topics)
 		for _, part := range parts[1:] {
 			topicParts := strings.Split(part, ";")
-			for _, subPart := range topicParts {
+			for _, subPart := range topicParts[1:] {
 				subscriptionParts := strings.Split(subPart, "|")
 				var sub = Subscription{
 					name: subscriptionParts[0],
@@ -143,8 +143,6 @@ func main() {
 				topics[topicParts[0]] = append(topics[topicParts[0]], sub)
 			}
 		}
-
-		fmt.Println(topics)
 
 		// Create the project and all its topics and subscriptions.
 		if err := create(context.Background(), parts[0], topics); err != nil {
