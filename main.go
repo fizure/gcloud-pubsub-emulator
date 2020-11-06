@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	debug   = flag.Bool("debug", false, "Enable debug logging")
+	debug   = flag.Bool("debug", true, "Enable debug logging")
 	help    = flag.Bool("help", false, "Display usage information")
 	version = flag.Bool("version", false, "Display version information")
 )
