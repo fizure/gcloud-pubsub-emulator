@@ -15,7 +15,7 @@ import (
 var (
 	debug   = flag.Bool("debug", true, "Enable debug logging")
 	help    = flag.Bool("help", false, "Display usage information")
-	version = flag.Bool("version", true, "Display version information")
+	version = flag.Bool("version", false, "Display version information")
 )
 
 // The CommitHash and Revision variables are set during building.
@@ -71,12 +71,6 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 		for _, subscription := range subscriptions {
 			if subscription.push != "" {
 				fmt.Printf("    Creating PUSH subscription %q on topic %q to endpoint %q\n", subscription.name, topicID, subscription.push)
-				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{Topic: topic})
-				if err != nil {
-					return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
-				}
-			} else {
-				fmt.Printf("    Creating PULL subscription %q on topic %q\n", subscription.name, topicID)
 				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{
 					Topic: topic,
 					PushConfig: pubsub.PushConfig{
@@ -90,6 +84,12 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 						MaximumBackoff: 5 * time.Second,
 					},
 				})
+				if err != nil {
+					return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
+				}
+			} else {
+				fmt.Printf("    Creating PULL subscription %q on topic %q\n", subscription.name, topicID)
+				_, err = client.CreateSubscription(ctx, subscription.name, pubsub.SubscriptionConfig{Topic: topic})
 				if err != nil {
 					return fmt.Errorf("Unable to create subscription %q on topic %q for project %q: %s", subscription, topicID, projectID, err)
 				}
