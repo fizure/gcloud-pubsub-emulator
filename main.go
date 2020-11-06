@@ -15,7 +15,7 @@ import (
 var (
 	debug   = flag.Bool("debug", true, "Enable debug logging")
 	help    = flag.Bool("help", false, "Display usage information")
-	version = flag.Bool("version", false, "Display version information")
+	version = flag.Bool("version", true, "Display version information")
 )
 
 // The CommitHash and Revision variables are set during building.
