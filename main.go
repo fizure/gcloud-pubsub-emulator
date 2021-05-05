@@ -76,7 +76,7 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 					PushConfig: pubsub.PushConfig{
 						Endpoint: subscription.push,
 					},
-					AckDeadline: 10 * time.Second,
+					AckDeadline: 300 * time.Second,
 					ExpirationPolicy: 10 * time.Minute,
 					RetainAckedMessages: false,
 					RetryPolicy: &pubsub.RetryPolicy{
