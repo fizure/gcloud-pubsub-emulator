@@ -134,12 +134,14 @@ func main() {
 
 		// Separate the projectID from the topic definitions.
 		parts := strings.Split(env, "\n")
+		fmt.Printf("Parts: %v", parts)
 		if len(parts) < 2 {
 			fatalf("%s: Expected at least 1 topic to be defined", currentEnv)
 		}
 
 		// Separate the topicID from the subscription IDs.
 		topics := make(Topics)
+		fmt.Printf("Topics: %v", topics)
 		for _, part := range parts[1:] {
 			fmt.Println(part)
 			topicParts := strings.Split(part, ";")
