@@ -103,7 +103,7 @@ func create(ctx context.Context, projectID string, topics Topics) error {
 func main() {
 	flag.Parse()
 	flag.Usage = func() {
-		fmt.Printf(`Usage: env PUBSUB_PROJECT1="project1,topic1,topic2:subscription1" %s`+"\n", os.Args[0])
+		fmt.Printf(`Usage: env PUBSUB_PROJECT1="project1\ntopic1\ntopic2:subscription1" %s`+"\n", os.Args[0])
 		flag.PrintDefaults()
 	}
 
@@ -141,6 +141,7 @@ func main() {
 		// Separate the topicID from the subscription IDs.
 		topics := make(Topics)
 		for _, part := range parts[1:] {
+			fmt.Println(part)
 			topicParts := strings.Split(part, ";")
 			for _, subPart := range topicParts[1:] {
 				subscriptionParts := strings.Split(subPart, "|")
