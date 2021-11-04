@@ -38,10 +38,13 @@ export PUBSUB_EMULATOR_HOST=localhost:8681
 ```
 
 ### Automatic topic and subscription creation
-This image also provides the ability to create topics and subscriptions in projects on startup by specifying the `PUBSUB_PROJECT` environment variable with a sequentual number appended to it, starting with _1_. The format of the environment variable is relatively simple:
+This image also provides the ability to create topics and subscriptions in projects on startup by specifying the `PUBSUB_PROJECT` environment variable with a sequentual number appended to it, starting with _1_. The format of the environment variable is relatively simple where the separator between entities is a newline character:
 
 ```
-PROJECTID,TOPIC1,TOPIC2:SUBSCRIPTION1:SUBSCRIPTION2,TOPIC3:SUBSCRIPTION3
+PROJECTID
+TOPIC1
+TOPIC2:SUBSCRIPTION1:SUBSCRIPTION2
+TOPIC3:SUBSCRIPTION3
 ```
 
 A comma-separated list where the first item is the _project ID_ and the rest are topics. The topics themselves are colon-separated where the first item is the _topic ID_ and the rest are _subscription IDs_. A topic doesn't necessarily need to specify subscriptions.
@@ -49,7 +52,10 @@ A comma-separated list where the first item is the _project ID_ and the rest are
 For example, if you have _project ID_ `company-dev`, with topic `invoices` that has a subscription `invoice-calculator`, another topic `chats` with subscriptions `slack-out` and `irc-out` and a third topic `notifications` without any subscriptions, you'd define it this way:
 
 ```
-PUBSUB_PROJECT1=company-dev,invoices:invoice-calculator,chats:slack-out:irc-out,notifications
+PUBSUB_PROJECT1=company-dev
+invoices:invoice-calculator
+chats:slack-out:irc-out
+notifications
 ```
 
 So the full command would look like:

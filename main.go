@@ -133,7 +133,7 @@ func main() {
 		}
 
 		// Separate the projectID from the topic definitions.
-		parts := strings.Split(env, ",")
+		parts := strings.Split(env, "\n")
 		if len(parts) < 2 {
 			fatalf("%s: Expected at least 1 topic to be defined", currentEnv)
 		}
